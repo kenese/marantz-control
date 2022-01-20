@@ -1,0 +1,21 @@
+{
+  "name": "marantz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "marantz-avr": "^1.1.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "limiter": "^1.0.5",
+    "request": "^2.53.0",
+    "xml2js": "^0.4.4"
+  }
+}
