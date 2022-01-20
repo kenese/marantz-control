@@ -1,0 +1,68 @@
+# Logs
+logs
+*.log
+
+#project
+dist
+dist*
+coverage
+yarn-lock.json
+
+#node
+node_modules
+npm-debug.log
+
+#bower
+bower_components
+
+#IDEs
+.idea
+*.iml
+*.sublime-*
+
+#Mac OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Atom
+.tern-project
+
+# vscode chrome debugger
+.vscode/chrome
+.vscode/settings.json
+
+server/credentials\.js
+
+# Teamcity
+.teamcity/target
+
+# SonarQube
+.scannerwork
+
+# Batect
+.batect/caches/*
+
+# Cypress
+cypress/support
+cypress/videos
+cypress/screenshots
+cypress/results
+cypress/logs
+cypress/plugins/index.html
+
+# Artifacts
+*.tgz
+storybook-static
+storybook
+
+# Secrets
+.env
+
+# Styleguide
+styleguide
+
+# XOP (Kotahi tool)
+.xop
