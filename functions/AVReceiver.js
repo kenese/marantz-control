@@ -49,7 +49,7 @@ class AVReceiver {
     this.ipAddress = ipAddress;
     this.limiter = new RateLimiter(1, 250);
     if (zone) {
-      this.zone = zone || null;
+      this.zone = zone;
     }
   }
 
@@ -77,31 +77,28 @@ class AVReceiver {
         return value;
       };
 
-      const model = {
+      return {
         power: getValue("Power"),
         input: getValue("InputFuncSelect"),
         volumeLevel: getValue("MasterVolume"),
         mute: getValue("Mute"),
         surroundMode: getValue("selectSurround"),
       };
-      return model;
     };
-    return new Promise((function(resolve, reject) {
-      console.log("get state");
+    return new Promise((resolve, reject) => {
       request({
         url: `http://${this.ipAddress}${STATUS_URL}`,
-      }, function(err, response, body) {
-        if (!err && response.statusCode == 200) {
-          parseXmlString(body, function(err, result) {
+      }, (err, response, body) => {
+        if (!err && response.statusCode === 200) {
+          parseXmlString(body, (er, result) => {
             const model = convertStatusToModel(result);
             resolve(model);
           });
         } else {
-          console.log("err", err);
           reject(err);
         }
       });
-    }).bind(this));
+    });
   }
 
   sendCommand(cmd) {
@@ -121,9 +118,8 @@ class AVReceiver {
             "Content-type": "text/html",
           },
           body: body,
-        }, function(err, response, body) {
-          console.log("err, response", err, response);
-          if (!err && response.statusCode == 200) {
+        }, (err, response) => {
+          if (!err && response.statusCode === 200) {
             resolve();
           } else {
             reject(err);
