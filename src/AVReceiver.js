@@ -89,8 +89,8 @@ class AVReceiver {
             };
             return model;
         };
-        return new Promise((function (resolve, reject) {
-            this._request({
+        return new Promise((resolve, reject) => {
+            request({
                 url: `http://${this.ipAddress}${STATUS_URL}`
             }, function (err, response, body) {
                 if (!err && response.statusCode == 200) {
@@ -102,18 +102,18 @@ class AVReceiver {
                     reject(err);
                 }
             })
-        }).bind(this));
+        });
     };
 
     sendCommand(cmd) {
-        return new Promise((function (resolve, reject) {
+        return new Promise((resolve, reject) => {
+            console.log('sending command', cmd);
             const command = {cmd0: cmd};
             if (this.zone) {
                 command.ZoneName = this.zone;
             }
-
             const body = qs.stringify(command);
-            this._request({
+            request({
                 url: `http://${this.ipAddress}/MainZone${POST_URL}`,
                 method: 'POST',
                 headers: {
@@ -124,27 +124,27 @@ class AVReceiver {
                 if (!err && response.statusCode == 200) {
                     resolve();
                 } else {
-
                     reject(err);
                 }
             })
-        }).bind(this));
+        });
     };
 
     getStateFor(name) {
-        return new Promise((function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             this.getState().then(function (state) {
                 resolve(state[name]);
             }, function (err) {
                 reject(err);
             });
-        }).bind(this));
+        });
     }
 
     setPowerState(state) {
         return new Promise((resolve, reject) => {
+            console.log('sending state', state);
             this.sendCommand('PutZone_OnOff/' + (state ? "ON" : "OFF"))
-                .then(function () {
+                .then(() => {
                     // Power state takes a long time so we wait a bit
                     setTimeout(resolve, 1000);
                 }, reject);
