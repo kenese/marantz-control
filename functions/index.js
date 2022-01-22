@@ -54,7 +54,6 @@ async function updateReceiver(receiver, updateValues) {
   const sourceUpdateResult = await receiver.getInputSource();
   const surroundUpdateResult = await receiver.getSurroundMode();
 
-
   return receiverName +
       `source set to ${sourceUpdateResult}, ` +
       `sound set to ${surroundUpdateResult}`;
