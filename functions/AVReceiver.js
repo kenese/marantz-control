@@ -7,9 +7,9 @@ const STATUS_URL = "/goform/formMainZone_MainZoneXml.xml";
 const POST_URL = "/index.put.asp";
 
 const zones = {
-  Main: null,
-  Zone2: "ZONE2",
-  Zone3: "ZONE3",
+  main: null,
+  zone2: "ZONE2",
+  zone3: "ZONE3",
 };
 const Sources = {
   GAME: "GAME",
@@ -86,8 +86,9 @@ class AVReceiver {
       };
     };
     return new Promise((resolve, reject) => {
+      const zone = this.zone ? `?&ZoneName=${this.zone}` : "";
       request({
-        url: `http://${this.ipAddress}${STATUS_URL}`,
+        url: `http://${this.ipAddress}${STATUS_URL}${zone}`,
       }, (err, response, body) => {
         if (!err && response.statusCode === 200) {
           parseXmlString(body, (er, result) => {
@@ -146,7 +147,8 @@ class AVReceiver {
       this.sendCommand("PutZone_OnOff/" + (state ? "ON" : "OFF"))
           .then(function() {
             // Power state takes a long time so we wait a bit
-            setTimeout(resolve, 1000);
+            // setTimeout(resolve, 1000);
+            resolve();
           }, reject);
     });
   }

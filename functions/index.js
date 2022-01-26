@@ -6,32 +6,46 @@ const {url} = require("./receiver-url.json");
 const UPDATE_RECEIVER_VALUES = {
   vinyl: {source: SOURCES.DVD, sound: SURROUND_MODES.PURE_DIRECT},
   cast: {source: SOURCES.MEDIA_PLAYER, sound: SURROUND_MODES.STEREO},
+  tv: {source: SOURCES.TV, sound: SURROUND_MODES.MOVIE},
   off: {power: "off"},
 };
 
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-// "Set marantz to cast"
-// "Set kitchen to cast"
-// "Set marantz and kitchen to cast"
+exports.marantzState = functions.https.onRequest(
+    async (request, response) => {
+      const receiver = new AVReceiver(url);
+
+      const main = await receiver.getState();
+      main.name = "main";
+      receiver.zone = ZONES.zone2;
+      const zone2 = await receiver.getState();
+      zone2.name = "zone2";
+
+      response.send([main, zone2]);
+    });
 
 exports.marantzUpdate = functions.https.onRequest(
     async (request, response) => {
-      const {value, receiverName} = request.query;
+      const source = request.query.source.toLowerCase();
+      const zone = request.query.zone.toLowerCase();
 
-      const receiverValueToUpdate = UPDATE_RECEIVER_VALUES[value] ?
-          UPDATE_RECEIVER_VALUES[value] :
+      const receiverValueToUpdate = UPDATE_RECEIVER_VALUES[source] ?
+          UPDATE_RECEIVER_VALUES[source] :
           UPDATE_RECEIVER_VALUES.cast;
 
-      const zone = ZONES[receiverName] ?
-          ZONES[receiverName] :
-          ZONES.Main;
+      const zoneToUpdate = ZONES[zone] ?
+          ZONES[zone] :
+          ZONES.main;
 
-      const receiver = new AVReceiver(url, zone);
+      const receiver = new AVReceiver(url, zoneToUpdate);
       let result = await updateReceiver(receiver, receiverValueToUpdate);
 
-      if (receiverName === "both") {
-        receiver.zone = ZONES.Zone2;
+      if (zone === "both" || zone === "all") {
+        receiver.zone = ZONES.zone2;
+        result = `\n${await updateReceiver(receiver, receiverValueToUpdate)}`;
+      }
+
+      if (zone === "all") {
+        receiver.zone = ZONES.zone3;
         result = `\n${await updateReceiver(receiver, receiverValueToUpdate)}`;
       }
 
@@ -49,7 +63,6 @@ async function updateReceiver(receiver, updateValues) {
 
   await receiver.setInputSource(updateValues.source);
   await receiver.setSurroundMode(updateValues.sound);
-  // await receiver.setVolumeLevel(-30)
 
   const sourceUpdateResult = await receiver.getInputSource();
   const surroundUpdateResult = await receiver.getSurroundMode();
