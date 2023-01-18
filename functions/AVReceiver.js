@@ -14,6 +14,7 @@ const zones = {
 const Sources = {
   GAME: "GAME",
   CBL_SAT: "SAT/CBL",
+  CD: "CD",
   NETWORK: "NET",
   USB: "USB/IPOD",
   TUNER: "TUNER",
@@ -161,11 +162,11 @@ class AVReceiver {
     return this.getStateFor("mute");
   }
 
-  volumeDown(level) {
+  volumeDown() {
     return this.sendCommand("PutMasterVolumeBtn/<");
   }
 
-  volumeUp(level) {
+  volumeUp() {
     return this.sendCommand("PutMasterVolumeBtn/>");
   }
 

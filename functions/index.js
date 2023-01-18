@@ -6,6 +6,7 @@ const {url} = require("./receiver-url.json");
 const UPDATE_RECEIVER_VALUES = {
   vinyl: {source: SOURCES.DVD, sound: SURROUND_MODES.PURE_DIRECT},
   cast: {source: SOURCES.MEDIA_PLAYER, sound: SURROUND_MODES.STEREO},
+  cd: {source: SOURCES.CD, sound: SURROUND_MODES.STEREO},
   tv: {source: SOURCES.TV, sound: SURROUND_MODES.MOVIE},
   off: {power: "off"},
 };
